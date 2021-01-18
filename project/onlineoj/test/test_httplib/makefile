@@ -1,2 +1,2 @@
 testhttplib:testhttp.cpp
-	g++ $^ -o $@ -g -lpthread
+	g++ $^ -o $@ -g -lpthread -std=c++11
