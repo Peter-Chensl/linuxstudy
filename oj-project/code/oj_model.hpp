@@ -72,11 +72,20 @@ class ojModel
         questions->push_back(kv.second);
       }
       //排序
-      std::sort(questions->begin(), questions->end(),[](const Question& l, const Question& r){return std::stoi(l.id_) < std::stoi(r.id_);});
+      std::sort(questions->begin(), questions->end(),[](const Question& l, const Question& r){
+          return std::stoi(l.id_) < std::stoi(r.id_);
+          });
+      return true;
     }
-    bool GetOneQuestion()
+    bool GetOneQuestion(const std::string& id,Question* ques)
     {
-
+      auto it = ques_map_.find(id);
+      if(it == ques_map_.end());
+      {
+        return false;
+      }
+      *ques = it->second;
+      return true;
     }
   private:
     std::unordered_map<std::string,Question> ques_map_;

@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cstdio>
+#include <vector>
 
 #include "httplib.h"
 #include "oj_model.hpp"
-
+#include "oj_view.hpp"
 int main()
 {
   using namespace httplib;
@@ -18,21 +19,40 @@ int main()
       std::vector<Question> questions;
       model.GetAllQuestion(&questions);
 
-      for(int i = 0;i < questions.size();i++)
-      {
-      std::cout << questions[i].id_ << " "<< question[i].title_ << " " << questions[i].star_ << " " << questions[i].path_ << std::endl;
+      //for(int i = 0;i < questions.size();i++)
+      //{
+      //std::cout << questions[i].id_ << " "<< questions[i].title_ << " " << questions[i].star_ << " " << questions[i].path_ << std::endl;
       //std::cout << questions[i].title_ << std::endl;
-      }
-      resp.set_content("<html>57-linux</html>",21,"text/html");
+      //}
+  
+      std::string html;
+      OjView::DrawAllQuestions(questions,&html);
+
+      resp.set_content(html,"text/html");
       });
 
   //返回单个试题
-  svr.Get("/signle_ques",[model](const Request& req,Response& resp){
+  //正则表达式获取题目ID
+  svr.Get(R"(/Question/(\d+))",[&model](const Request& req,Response& resp){
+      Question ques;
+      //获取单个试题
+      model.GetOneQuestion(req.matches[1].str(),&ques);
 
+      //2渲染模板的html文件
+      std::string html;
+      OjView::DrawOneQuestion(ques,&html);
+
+      resp.set_content(html,"test/html");
       });
 
   //编译运行
-  svr.Post("/test-no",[model](const Request& req,Response& resp){
+  svr.Post(R"(/compile/(\d+))",[&model](const Request& req,Response& resp){
+      //获取试题编号
+      std::sring ques_id = req.matches[1].str();
+      Question ques;
+      model.GetOneQuestion(req.matches[1].str(),&ques);
+
+      UrlUtil::urlDecode(req.body);
 
       });
 
