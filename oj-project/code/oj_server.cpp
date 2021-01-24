@@ -1,10 +1,13 @@
 #include <iostream>
 #include <cstdio>
 #include <vector>
+#include <unordered_map>
 
 #include "httplib.h"
 #include "oj_model.hpp"
 #include "oj_view.hpp"
+#include "tools.hpp"
+
 int main()
 {
   using namespace httplib;
@@ -48,11 +51,26 @@ int main()
   //编译运行
   svr.Post(R"(/compile/(\d+))",[&model](const Request& req,Response& resp){
       //获取试题编号
-      std::sring ques_id = req.matches[1].str();
+     // std::string ques_id = req.matches[1].str();
       Question ques;
       model.GetOneQuestion(req.matches[1].str(),&ques);
 
-      UrlUtil::urlDecode(req.body);
+      //std::cout << req.body << std::endl;
+     // std::cout << UrlUtil::urlDecode(req.body) << std::endl;
+
+      std::unordered_map<std::string,std::string> body_kv;
+      UrlUtil::PraseBody(req.body,&body_kv);
+
+      std::cout << body_kv["code"] << std::endl;
+      //std::vector<std::string>vec;
+      //StringUtil::Splite(UrlUtil::UrlDecode(req.body),"=",&vec);
+      //StringUtil::Splite(UrlUtil::UrlDecode(req.body),":",&vec);
+
+      //for(int i = 0; i< vec.size();i++)
+     // {
+     // std::cout << vec[i] << std::endl;
+     // std::cout <<"printf success" << std::endl;
+     // }
 
       });
 

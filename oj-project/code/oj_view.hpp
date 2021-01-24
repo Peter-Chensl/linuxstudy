@@ -10,7 +10,7 @@ class OjView
       public:
         static void DrawAllQuestions(std::vector<Question>& questions,std::string* html)
         {
-          ctemplate::TemplateDictionary dict("allquestion");
+          ctemplate::TemplateDictionary dict("all_questions");
 
           for(const auto& ques : questions)
            {
@@ -23,11 +23,11 @@ class OjView
            }
 
         //填充
-        ctemplate::Template* t1 = ctemplate::Template::GetTemplate("./template/all_questions.html",ctemplate::DO_NOT_STRIP);
+        ctemplate::Template* tl = ctemplate::Template::GetTemplate("./template/all_questions.html",ctemplate::DO_NOT_STRIP);
         //渲染
-        t1->Expand(html,&dict);
+        tl->Expand(html,&dict);
         }
-        static void DrawOneQuestion(const Question &question,std::string *html)
+        static void DrawOneQuestion(const Question& question,std::string* html)
         {
           ctemplate::TemplateDictionary dict("question");
           dict.SetValue("id",question.id_);
