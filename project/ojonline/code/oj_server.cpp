@@ -8,6 +8,7 @@
 #include "oj_model.hpp"
 #include "oj_view.hpp"
 #include "compile.hpp"
+#include "tools.hpp"
 
 int main()
 {
@@ -78,10 +79,23 @@ int main()
             Json::Value resp_json;
             Compiler::CompileAndRun(req_json, &resp_json);
 
+            //获取得返回结果都在resp_json中
+            
+            std::string err_no = resp_json["errorno"].asString();
+            std::string case_result = resp_json["stdout"].asString();
+            std::string reason = resp_json["reason"].asString();
+              
+            std::string html;
+            OjView::DrawCaseResult(err_no, case_result,reason, &html);
+
+            resp.set_content(html, "text/html");
+
+
             
 
             });
 
-    svr.listen("0.0.0.0", 17878);
+    LOG (INFO,"listn_port") << ": 17878" << std::endl;
+    svr.listen("0.0.0.0", 178178);
     return 0;
 }

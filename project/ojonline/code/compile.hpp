@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 #include <fcntl.h>
 #include <iostream>
 #include <string>
@@ -91,7 +92,7 @@ class Compiler
 
 
             //6.删除临时文件
-            Clean(file_nameheader);
+            //Clean(file_nameheader);
             return;
         }
 
@@ -127,8 +128,18 @@ class Compiler
             }
             else
             {
+                //注册一个定时器，alarm
+                //限制运行时间
+                alarm(1);
                 //child
                 //进程程序替换， 替换编译创建出来的可执行程序
+                //限制内存
+                struct rlimit rlim;
+                rlim.rlim_cur = 30000 * 1024;
+                rlim.rlim_max = RLIM_INFINITY;
+                setrlimit(RLIMIT_AS, &rlim);
+
+
                 int stdout_fd = open(StdoutPath(file_name).c_str(), O_CREAT | O_WRONLY, 0666);
                 if(stdout_fd < 0)
                 {
@@ -165,7 +176,7 @@ class Compiler
             }
             else if (pid == 0)
             {
-                //child
+                //child 
                 //进程程序替换--》 g++ SrcPath(filename) -o ExePath(filename) "-std=c++11"
                 int fd = open(CompileErrorPath(file_name).c_str(), O_CREAT | O_WRONLY, 0666);
                 if(fd < 0)
@@ -198,7 +209,7 @@ class Compiler
             }
 
             return true;
-        }
+        } 
         static std::string StdoutPath(const std::string& filename)
         {
             return "./tmp_file/" + filename + ".stdout";
