@@ -1,3 +1,7 @@
+testJiangshi:testjiangshi.cpp
+	gcc -g $^ -o $@
+
+
 jindutiao:jindutiao.c
 	gcc -g  $^ -o $@
 a:a.c
