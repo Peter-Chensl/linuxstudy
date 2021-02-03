@@ -21,10 +21,10 @@ int main()
   }
   else
   {
-    printf("我是父进程，我将睡眠2秒\n");
-    sleep(2);
+    printf("我是父进程，我将睡眠30秒\n");
+    sleep(30);
   }
-  //system("ps -o pid, ppid,state,tty,command");
+ // system("ps -o pid, ppid,state,tty,command");
   printf(" 父进程退出\n");
   return 0;
 }

@@ -1,3 +1,7 @@
+envTest:envTest.cpp 
+	gcc -g $^ -o $@
+testOrphans:testOrphans.cpp 
+	gcc -g $^ -o $@
 testJiangshi:testjiangshi.cpp
 	gcc -g $^ -o $@
 
